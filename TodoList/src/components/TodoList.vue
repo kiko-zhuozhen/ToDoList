@@ -3,8 +3,9 @@
         <h4>Search</h4>
         <input v-model="searchText" type="text" placeholder="Search">
         <h4 v-if="searchText">Search Results</h4>
+        <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
         <ul v-if="searchText">
-            <li v-for="(todo, index) in filterText" :key='index'>
+            <li v-for="(todo, index) in filterTodos" :key='index'>
                 {{ todo.text }}
                 <button @click="removeTodo(index)">Delete</button>
             </li>
@@ -16,25 +17,31 @@
 
         <ul>
             <li v-for="(todo, index) in todos" :key='index'>
-                <input type="checkbox" v-model="checkTodo[index]" @change="removeChecked(index)">
+                <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
+                <!-- 里面的数据可以编辑的 -->
+                <input type="checkbox" v-model="checkTodo[index]" @click="">
                 {{ todo.text }}
                 <button @click="removeTodo(index)">Delete</button>
             </li>
         </ul>
+
+        <!-- 计数器 -->
+
     </div>
 </template>
 
 <script lang="ts" setup name="Person">
     import {ref, watchEffect} from 'vue'
 
+    //ref 声明一个类型？
     let searchText=ref('')
     let newTodo = ref('')
     let todos = ref([] as { text:string }[])
-    let filterText = ref([] as { text: string }[])
+    let filterTodos = ref([] as { text: string }[])
     let checkTodo = ref([] as boolean[] )
 
     watchEffect(() => {
-        filterText.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
+        filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
     })
 
     function addTodo() {
