@@ -2,43 +2,45 @@
     <div class="list">
         <h4>Search</h4>
         <input v-model="searchText" type="text" placeholder="Search">
-        <h4 v-if="searchText">Search Results</h4>
-        <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
-        <ul v-if="searchText">
-            <li v-for="(todo, index) in filterTodos" :key='index'>
-                {{ todo.text }}
-                <button @click="removeTodo(index)">Delete</button>
-            </li>
-        </ul>
 
         <h4>To Do List</h4>
         <input v-model="newTodo" @keyup.enter="addTodo" type="text" placeholder="Add to do information">
         <button @click="addTodo">Add</button>
 
-        <ul>
-            <li v-for="(todo, index) in todos" :key='index'>
-                <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
-                <!-- 里面的数据可以编辑的 -->
-                <input type="checkbox" v-model="checkTodo[index]" @click="">
+        <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
+        <ul v-if="searchText!==''">
+            <li v-for="(todo, index) in filterTodos" :key='index'>
+                <input type="checkbox">
                 {{ todo.text }}
                 <button @click="removeTodo(index)">Delete</button>
             </li>
         </ul>
 
+        <ul v-else-if="searchText==''">
+            <li v-for="(todo, index) in todos" :key='index'>
+                <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
+                <!-- 里面的数据可以编辑的 -->
+                <input type="checkbox" v-model="todo.done">
+                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = event.target.value" @keyup.enter="finishEdit(todo)">
+                <span v-else @click="editTodo(todo)"> {{ todo.text }} </span>
+                <button @click="removeTodo(index)">Delete</button>
+            </li>
+        </ul>   
+
         <!-- 计数器 -->
+        <p>{{ completeTodos }} / {{ totalTodos }}</p>
 
     </div>
 </template>
 
 <script lang="ts" setup name="Person">
-    import {ref, watchEffect} from 'vue'
+    import {ref, watchEffect, computed} from 'vue'
 
     //ref 声明一个类型？
     let searchText=ref('')
     let newTodo = ref('')
-    let todos = ref([] as { text:string }[])
+    let todos = ref([] as { text:string, done:false, editing:boolean }[])
     let filterTodos = ref([] as { text: string }[])
-    let checkTodo = ref([] as boolean[] )
 
     watchEffect(() => {
         filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
@@ -46,22 +48,34 @@
 
     function addTodo() {
         if (newTodo.value.trim()!=='') {
-            todos.value.push({ text:newTodo.value })
-            checkTodo.value.push(false)
+            todos.value.push({ text:newTodo.value, done:false, editing:false })
             newTodo.value = ''
         }
     }
 
     function removeTodo(index:number){
-        todos.value.splice(index, 1);
+        todos.value.splice(index, 1)
     }
 
-    function removeChecked(index:number){
-        if (checkTodo.value[index]) {
-            todos.value.splice(index, 1);
-            checkTodo.value.splice(index, 1);
+    function editTodo(todo: {text:string, editing:boolean}) {
+        todo.editing = true
+    }
+
+    function finishEdit(todo: {text:string, editing:boolean}) {
+        if (!todo.text.trim()) {
+            todos.value.push({ text:newTodo.value, done: false, editing:false})
+        } else {
+            todo.editing=false
         }
     }
+
+    const totalTodos = computed(() => {
+        return todos.value.length;
+    })
+
+    const completeTodos = computed(() => {
+        return todos.value.filter(todo => todo.done).length;
+    })
 
 
 </script>
