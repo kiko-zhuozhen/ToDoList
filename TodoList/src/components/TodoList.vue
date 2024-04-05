@@ -21,7 +21,8 @@
                 <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
                 <!-- 里面的数据可以编辑的 -->
                 <input type="checkbox" v-model="todo.done">
-                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = event.target.value" @keyup.enter="finishEdit(todo)">
+                <!-- 前面这个变量有值的情况下才运行 -->
+                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)">
                 <span v-else @click="editTodo(todo)"> {{ todo.text }} </span>
                 <button @click="removeTodo(index)">Delete</button>
             </li>
