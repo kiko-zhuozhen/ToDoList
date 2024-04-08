@@ -38,10 +38,10 @@
     import {ref, watchEffect, computed} from 'vue'
 
     //ref 加上类型
-    let searchText=ref('')
-    let newTodo = ref('')
-    let todos = ref([] as { text:string, done:false, editing:boolean }[])
-    let filterTodos = ref([] as { text: string }[])
+    let searchText=ref<string>('')
+    let newTodo = ref<string>('')
+    let todos = ref<Array<{ text:string, done:false, editing:boolean }>>([])
+    let filterTodos = ref<Array<{ text: string }>>([])
 
     watchEffect(() => {
         filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
