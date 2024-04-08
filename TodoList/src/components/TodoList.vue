@@ -37,7 +37,7 @@
 <script lang="ts" setup name="Person">
     import {ref, watchEffect, computed} from 'vue'
 
-    //ref 声明一个类型？
+    //ref 加上类型
     let searchText=ref('')
     let newTodo = ref('')
     let todos = ref([] as { text:string, done:false, editing:boolean }[])
