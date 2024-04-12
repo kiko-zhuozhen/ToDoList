@@ -36,10 +36,12 @@
 
 <script lang="ts" setup name="Person">
     import {ref, watchEffect, computed} from 'vue'
+    import type { Todo } from '../models/Todo'
     //ref 加上类型
     let searchText=ref<string>('')
     let newTodo = ref<string>('')
-    let todos = ref<Array<{ text:string, done:false, editing:boolean }>>([])
+    //定义todo类型 导入todo类型
+    let todos = ref<Todo[]>([])
     let filterTodos = ref<Array<{ text: string }>>([])
 
     watchEffect(() => {

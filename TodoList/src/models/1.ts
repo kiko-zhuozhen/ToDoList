@@ -31,13 +31,15 @@ interface IPerson {
     sex:string;
 }
 
+//javascript object
+
 let obj: IPerson = {
     name:'abc',
     age: 20,
     sex:'male'
 }
 //定义空对象也会报错
-//let ojb2:IPerson = {}
+//let obj2:IPerson = {}
 
 //可选项
 interface IPerson2 {
@@ -52,6 +54,7 @@ let obj2:IPerson2 = {} //可以设置空对象
 interface IA extends IPerson {
     hobby:Array<string>;
 }
+
 //要写IPerson的信息也要写额外的IA里面的信息
 let person2:IA ={
     name:'abc',
@@ -71,6 +74,7 @@ let person4: IPerson & IA = {
 interface IPerson3 {
     [propName:string]:any; //定义任意属性名称和值
 }
+
 let person3: IPerson3 = {
     a:1,
     b:true
@@ -84,6 +88,7 @@ interface IPerson4 {
     getName: () => string; //一个function可以获得一个string返回值
     getAge(): number;
 }
+
 //实现自己的接口
 class Person implements IPerson4 {
     name:string ='123';
@@ -95,6 +100,7 @@ class Person implements IPerson4 {
     getAge(): number {
         return this.age;
     };
+
     //类自己的方法
     sayHello():void {
     
