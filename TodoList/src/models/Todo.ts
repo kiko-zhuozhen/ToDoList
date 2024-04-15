@@ -1,5 +1,5 @@
 export interface Todo {
     text:string;
-    done:boolean;
+    done?:boolean;
     editing:boolean;
 }

@@ -10,8 +10,9 @@
         <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
         <ul v-if="searchText!==''">
             <li v-for="(todo, index) in filterTodos" :key='index'>
-                <input type="checkbox">
-                {{ todo.text }}
+                <input type="checkbox" v-model="todo.done">
+                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)">
+                <span v-else @click="editTodo(todo)"> {{ todo.text }} </span>
                 <button @click="removeTodo(index)">Delete</button>
             </li>
         </ul>
@@ -42,7 +43,8 @@
     let newTodo = ref<string>('')
     //定义todo类型 导入todo类型
     let todos = ref<Todo[]>([])
-    let filterTodos = ref<Array<{ text: string }>>([])
+    //储存一个空数组
+    let filterTodos = ref<Todo[]>([])
 
     watchEffect(() => {
         filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
@@ -59,11 +61,11 @@
         todos.value.splice(index, 1)
     }
 
-    function editTodo(todo: {text:string, editing:boolean}) {
+    function editTodo(todo:Todo) {
         todo.editing = true
     }
 
-    function finishEdit(todo: {text:string, editing:boolean}) {
+    function finishEdit(todo:{ text:string, editing:boolean}) {
         if (!todo.text.trim()) {
             todos.value.push({ text:newTodo.value, done: false, editing:false})
         } else {
