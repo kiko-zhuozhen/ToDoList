@@ -45,7 +45,7 @@
                     }"
                 >
                 <span v-else @click="updateTodo(todo)"> {{ todo.text }} </span>
-                <button @click="removeTodo(todo.id)">Delete</button>
+                <button @click="removeTodo(index)">Delete</button>
             </li>
         </ul>   
 
@@ -89,11 +89,11 @@
     }
 
     function handleClick() {
-    const newTodo = {
-        ...todo.value,
-        editing: false
-    };
-    updateTodo(newTodo);
+        const newTodo = {
+            ...todos.value,
+            editing: false
+        };
+        updateTodo(newTodo);
     }
 
     function updateTodo(newVal: Todo) {
