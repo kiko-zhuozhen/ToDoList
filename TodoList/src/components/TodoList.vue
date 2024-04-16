@@ -12,8 +12,8 @@
             <li v-for="(todo, index) in filterTodos" :key='index'>
                 <input type="checkbox" v-model="todo.done">
                 <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)">
-                <span v-else @click="editTodo(todo)"> {{ todo.text }} </span>
-                <button @click="removeTodo(index)">Delete</button>
+                <span v-else @click="edit(todo)"> {{ todo.text }} </span>
+                <button @click="removeTodo(todo.id)">Delete</button>
             </li>
         </ul>
         
@@ -44,8 +44,8 @@
                         updateTodo(newTodo)
                     }"
                 >
-                <span v-else @click="updateTodo(todo)"> {{ todo.text }} </span>
-                <button @click="removeTodo(index)">Delete</button>
+                <span v-else @click="edit(todo)"> {{ todo.text }} </span>
+                <button @click="removeTodo(todo.id)">Delete</button>
             </li>
         </ul>   
 
@@ -84,30 +84,23 @@
         newTodo.value = ''
     }
 
-    function removeTodo(index:number){
-        todos.value.splice(index, 1)
+    function removeTodo(todoID:string){
+        const index = todos.value.findIndex(todo=> todo.id === todoID);
+        if (index !== -1){
+            todos.value.splice(index, 1)
+        }
     }
 
-    function handleClick() {
-        const newTodo = {
-            ...todos.value,
-            editing: false
-        };
-        updateTodo(newTodo);
+    function edit(todo:Todo) {
+        todo.editing = true;
     }
 
     function updateTodo(newVal: Todo) {
-        const index = todos.value.findIndex(it => it.id === newVal.id)
+        const index = todos.value.findIndex(todo => todo.id === newVal.id)
         if(index === -1) {
             return
         }
         todos.value.splice(index, 1, newVal)
-    }
-
-    function finishEdit(todo:Todo) {
-        if (todo.text.trim()==='') {
-            todo.editing=false
-        }
     }
 
     const totalTodos = computed(() => {
