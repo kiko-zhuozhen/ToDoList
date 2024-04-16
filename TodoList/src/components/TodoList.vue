@@ -11,7 +11,7 @@
         <ul v-if="searchText!==''">
             <li v-for="(todo, index) in filterTodos" :key='index'>
                 <input type="checkbox" v-model="todo.done">
-                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)">
+                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target">
                 <span v-else @click="edit(todo)"> {{ todo.text }} </span>
                 <button @click="removeTodo(todo.id)">Delete</button>
             </li>
