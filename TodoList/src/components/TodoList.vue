@@ -16,16 +16,36 @@
                 <button @click="removeTodo(index)">Delete</button>
             </li>
         </ul>
+        
 
         <ul v-else-if="searchText==''">
-            <li v-for="(todo, index) in todos" :key='index'>
+            <li v-for="(todo, index) in todos" :key='todo.id'>
                 <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
                 <!-- 里面的数据可以编辑的 -->
                 <input type="checkbox" v-model="todo.done">
                 <!-- 前面这个变量有值的情况下才运行 -->
-                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)">
-                <span v-else @click="editTodo(todo)"> {{ todo.text }} </span>
-                <button @click="removeTodo(index)">Delete</button>
+                <!-- <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)"> -->
+
+                <input v-if="todo.editing" 
+                    :value="todo.text" 
+                    @input="event => {
+                        const newText = (event.target as any)?.value
+                        const newTodo = {
+                            ...todo,
+                            text: newText,
+                        }
+                        updateTodo(newTodo)
+                    }"
+                    @keyup.enter="() => {
+                        const newTodo: Todo = {
+                            ...todo,
+                            editing: false
+                        }
+                        updateTodo(newTodo)
+                    }"
+                >
+                <span v-else @click="updateTodo(todo)"> {{ todo.text }} </span>
+                <button @click="removeTodo(todo.id)">Delete</button>
             </li>
         </ul>   
 
@@ -38,6 +58,7 @@
 <script lang="ts" setup name="Person">
     import {ref, watchEffect, computed} from 'vue'
     import type { Todo } from '../models/Todo'
+    import { generateUuid } from '../utils/generateUuid'
     //ref 加上类型
     let searchText=ref<string>('')
     let newTodo = ref<string>('')
@@ -47,28 +68,44 @@
     let filterTodos = ref<Todo[]>([])
 
     watchEffect(() => {
-        filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
+        //filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
     })
 
     function addTodo() {
-        if (newTodo.value.trim()!=='') {
-            todos.value.push({ text:newTodo.value, done:false, editing:false })
-            newTodo.value = ''
+        if (newTodo.value.trim() ==='') {
+            return
         }
+        todos.value.push({
+            id: generateUuid(),
+            text:newTodo.value,
+            done:false,
+            editing:false
+         })
+        newTodo.value = ''
     }
 
     function removeTodo(index:number){
         todos.value.splice(index, 1)
     }
 
-    function editTodo(todo:Todo) {
-        todo.editing = true
+    function handleClick() {
+    const newTodo = {
+        ...todo.value,
+        editing: false
+    };
+    updateTodo(newTodo);
     }
 
-    function finishEdit(todo:{ text:string, editing:boolean}) {
-        if (!todo.text.trim()) {
-            todos.value.push({ text:newTodo.value, done: false, editing:false})
-        } else {
+    function updateTodo(newVal: Todo) {
+        const index = todos.value.findIndex(it => it.id === newVal.id)
+        if(index === -1) {
+            return
+        }
+        todos.value.splice(index, 1, newVal)
+    }
+
+    function finishEdit(todo:Todo) {
+        if (todo.text.trim()==='') {
             todo.editing=false
         }
     }
