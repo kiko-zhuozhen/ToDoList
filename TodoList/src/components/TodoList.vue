@@ -10,7 +10,7 @@
         <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
         <!-- 用一个computed属性去计算 -->
         <ul v-if="searchText!==''">
-            <li v-for="(todo, index) in filterTodos" :key='index'>
+            <li v-for="(todo, index) in todos" :key='index'>
                 <input type="checkbox" v-model="todo.done">
                 <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target">
                 <span v-else @click="edit(todo)"> {{ todo.text }} </span>
@@ -19,14 +19,23 @@
         </ul>
         
         <ul v-else-if="searchText==''">
-            <li v-for="(todo, index) in todos" :key='todo.id'>
+            <todo-row v-for="(todo, index) in todos"
+                  :key="todo.id"
+                  :todo="todo"
+                  @edit="edit"
+                  @remove="removeTodo"
+                  @update-todo="updateTodo">
+            </todo-row>
+        </ul> 
+
+            <!-- <li v-for="(todo, index) in todos" :key='todo.id'> -->
                 <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
                 <!-- 里面的数据可以编辑的 -->
-                <input type="checkbox" v-model="todo.done">
+                <!-- <input type="checkbox" v-model="todo.done"> -->
                 <!-- 前面这个变量有值的情况下才运行 -->
                 <!-- <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target" @keyup.enter="finishEdit(todo)"> -->
 
-                <input v-if="todo.editing" 
+                <!-- <input v-if="todo.editing" 
                     :value="todo.text" 
                     @input="event => {
                         const newText = (event.target as any)?.value
@@ -46,8 +55,7 @@
                 >
                 <span v-else @click="edit(todo)"> {{ todo.text }} </span>
                 <button @click="removeTodo(todo.id)">Delete</button>
-            </li>
-        </ul>   
+            </li> -->  
 
         <!-- 计数器 -->
         <p>{{ completeTodos }} / {{ totalTodos }}</p>
@@ -55,39 +63,37 @@
     </div>
 </template>
 
-<script lang="ts" setup name="Person">
-    import {ref, watchEffect, computed} from 'vue'
-    import type { Todo } from '../models/Todo'
-    import { generateUuid } from '../utils/generateUuid'
-    //ref 加上类型
-    let searchText=ref<string>('')
-    let newTodo = ref<string>('')
-    //定义todo类型 导入todo类型
-    let todos = ref<Todo[]>([])
-    //储存一个空数组
-    let filterTodos = ref<Todo[]>([])
+<script lang="ts" setup>
+    import { ref, computed, watchEffect } from 'vue';
+    import type { Todo } from '../models/Todo';
+    import { generateUuid } from '../utils/generateUuid';
+    import TodoRow from './todoRow.vue';
+
+    let searchText = ref<string>('');
+    let newTodo = ref<string>('');
+    let todos = ref<Todo[]>([]);
 
     watchEffect(() => {
         //filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
     })
 
     function addTodo() {
-        if (newTodo.value.trim() ==='') {
-            return
+        if (newTodo.value.trim() === '') {
+            return;
         }
         todos.value.push({
             id: generateUuid(),
-            text:newTodo.value,
-            done:false,
-            editing:false
-         })
-        newTodo.value = ''
+            text: newTodo.value,
+            done: false,
+            editing: false
+        });
+        newTodo.value = '';
     }
 
-    function removeTodo(todoID:string){
-        const index = todos.value.findIndex(todo=> todo.id === todoID);
-        if (index !== -1){
-            todos.value.splice(index, 1)
+    function removeTodo(todoID: string) {
+        const index = todos.value.findIndex(todo => todo.id === todoID);
+        if (index !== -1) {
+            todos.value.splice(index, 1);
         }
     }
 
