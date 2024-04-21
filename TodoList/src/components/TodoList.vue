@@ -8,6 +8,7 @@
         <button @click="addTodo">Add</button>
 
         <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
+        <!-- 用一个computed属性去计算 -->
         <ul v-if="searchText!==''">
             <li v-for="(todo, index) in filterTodos" :key='index'>
                 <input type="checkbox" v-model="todo.done">
@@ -17,7 +18,6 @@
             </li>
         </ul>
         
-
         <ul v-else-if="searchText==''">
             <li v-for="(todo, index) in todos" :key='todo.id'>
                 <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
