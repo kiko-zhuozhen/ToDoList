@@ -9,16 +9,8 @@
 
         <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
         <!-- 用一个computed属性去计算 -->
-        <ul v-if="searchText!==''">
-            <li v-for="(todo, index) in todos" :key='index'>
-                <input type="checkbox" v-model="todo.done">
-                <input v-if="todo.editing" :value="todo.text" @input="event => todo.text = (event.target as any)?.target">
-                <span v-else @click="edit(todo)"> {{ todo.text }} </span>
-                <button @click="removeTodo(todo.id)">Delete</button>
-            </li>
-        </ul>
-        
-        <ul v-else-if="searchText==''">
+
+        <ul v-if="searchText==''">
             <todo-row v-for="(todo, index) in todos"
                   :key="todo.id"
                   :todo="todo"
@@ -27,6 +19,15 @@
                   @update-todo="updateTodo">
             </todo-row>
         </ul> 
+        <ul v-else>
+            <todo-row v-for="(todo, index) in filterTodos"
+                  :key="todo.id"
+                  :todo="todo"
+                  @edit="edit"
+                  @remove="removeTodo"
+                  @update-todo="updateTodo">
+            </todo-row>
+        </ul>
 
             <!-- <li v-for="(todo, index) in todos" :key='todo.id'> -->
                 <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
@@ -72,9 +73,10 @@
     let searchText = ref<string>('');
     let newTodo = ref<string>('');
     let todos = ref<Todo[]>([]);
+    let filterTodos = ref<Todo[]>([]);
 
     watchEffect(() => {
-        //filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
+        filterTodos.value = todos.value.filter(item => item.text.toLowerCase().includes(searchText.value.toLowerCase()))
     })
 
     function addTodo() {

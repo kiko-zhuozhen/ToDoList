@@ -20,7 +20,11 @@ const props = defineProps<{
     todo: Todo;
 }>();
 
-const emit = defineEmits(['update-todo', 'edit', 'remove']);
+const emit = defineEmits<{
+  (e: 'update-todo', todo:Todo): void;
+  (e: 'edit', todo:Todo): void;
+  (e: 'remove', id:string):void;
+}>()
 
 function handleInput(event: Event) {
     const target = event.target as HTMLInputElement;
