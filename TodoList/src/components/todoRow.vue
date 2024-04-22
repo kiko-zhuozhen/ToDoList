@@ -5,7 +5,7 @@
                :value="todo.text"
                @input="handleInput"
                @keyup.enter="finishEdit">
-        <span v-else @click="ToogleEdit">
+        <span v-else @click="ToggleEdit">
             {{ todo.text }}
         </span>
         <button @click="handleDeleteClick">Delete</button>
@@ -32,7 +32,7 @@ function finishEdit() {
     emit('update-todo', { ...props.todo, editing: false });
 }
 
-function ToogleEdit() {
+function ToggleEdit() {
     emit('edit', props.todo);
 }
 
