@@ -67,7 +67,7 @@
     import { ref, computed, watchEffect } from 'vue';
     import type { Todo } from '../models/Todo';
     import { generateUuid } from '../utils/generateUuid';
-    import TodoRow from './todoRow.vue';
+    import TodoRow from './TodoRow.vue';
 
     let searchText = ref<string>('');
     let newTodo = ref<string>('');

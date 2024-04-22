@@ -5,10 +5,10 @@
                :value="todo.text"
                @input="handleInput"
                @keyup.enter="finishEdit">
-        <span v-else @click="emitEdit">
+        <span v-else @click="ToogleEdit">
             {{ todo.text }}
         </span>
-        <button @click="emitRemove">Delete</button>
+        <button @click="handleDeleteClick">Delete</button>
     </li>
 </template>
 
@@ -32,11 +32,11 @@ function finishEdit() {
     emit('update-todo', { ...props.todo, editing: false });
 }
 
-function emitEdit() {
+function ToogleEdit() {
     emit('edit', props.todo);
 }
 
-function emitRemove() {
+function handleDeleteClick() {
     emit('remove', props.todo.id);
 }
 </script>
