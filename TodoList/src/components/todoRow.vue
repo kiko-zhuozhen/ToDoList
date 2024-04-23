@@ -44,3 +44,4 @@ function handleDeleteClick() {
     emit('remove', props.todo.id);
 }
 </script>
+
