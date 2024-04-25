@@ -5,7 +5,8 @@ export function formatDate(date: Date) {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false
+    hour12: false,
+    timeZone:'UTC'
   });
   
   return formatter.format(date).replace(',', '');

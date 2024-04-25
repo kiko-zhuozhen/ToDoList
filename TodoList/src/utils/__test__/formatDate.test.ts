@@ -1,8 +1,15 @@
-import { expect, test } from 'vitest'
-import { formatDate } from '../formatDate'
+import { expect, test } from 'vitest';
+import { formatDate } from '../formatDate'; // 确保路径正确
 
-test('正确的', () => {
-  expect('2024/02/23').toBe('2024/02/23')
-})
+// 测试正确的日期格式
+test('formats date correctly', () => {
+  const testDate = new Date('2023-02-23T14:00:00Z');
+  const formattedDate = formatDate(testDate);
+  expect(formattedDate).toBe('02/23/2023 14:00');
+});
 
-test('错误的') ('2023-02-23')
+test('handles invalid date correctly', () => {
+  const testDate = new Date('This is not a date');
+  const formattedDate = formatDate(testDate);
+  expect(formattedDate).toBe('Invalid Date');
+});

@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { defineProps, defineEmits } from 'vue';
 import type { Todo } from '../models/Todo';
-import { formatDate } from './utils/formatDate';
+import { formatDate } from '../utils/formatDate';
 
 const props = defineProps<{
     todo: Todo;
