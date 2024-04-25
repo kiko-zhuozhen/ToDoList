@@ -80,7 +80,8 @@
             id: generateUuid(),
             text: newTodo.value,
             done: false,
-            editing: false
+            editing: false,
+            created: new Date()
         });
         newTodo.value = '';
     }

@@ -8,6 +8,9 @@
         <span v-else @click="ToggleEdit">
             {{ todo.text }}
         </span>
+        <span style="margin-left:60px">
+            {{ formatDate(todo.created) }}
+        </span>
         <button @click="handleDeleteClick">Delete</button>
     </li>
 </template>
@@ -15,6 +18,7 @@
 <script lang="ts" setup>
 import { defineProps, defineEmits } from 'vue';
 import type { Todo } from '../models/Todo';
+import { formatDate } from './utils/formatDate';
 
 const props = defineProps<{
     todo: Todo;
@@ -43,5 +47,6 @@ function ToggleEdit() {
 function handleDeleteClick() {
     emit('remove', props.todo.id);
 }
+
 </script>
 
