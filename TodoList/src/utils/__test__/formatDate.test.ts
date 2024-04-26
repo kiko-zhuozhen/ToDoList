@@ -1,7 +1,6 @@
 import { expect, test } from 'vitest';
 import { formatDate } from '../formatDate'; // 确保路径正确
 
-// 测试正确的日期格式
 test('formats date correctly', () => {
   const testDate = new Date('2023-02-23T14:00:00Z');
   const formattedDate = formatDate(testDate);
