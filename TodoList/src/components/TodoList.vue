@@ -117,12 +117,5 @@
 </script>
 
 <style scoped>
-    .list{
-        background-color: skyblue;
-        box-shadow: 0 0 10px;
-        padding: 20px;
-    }
-    button{
-        margin:0 10px;
-    }
+
 </style>
