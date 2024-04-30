@@ -1,6 +1,6 @@
 <template>
     <div class="list">
-        <h4>Search</h4>
+        <h4 class="bg-red-500">Search</h4>
         <input v-model="searchText" type="text" placeholder="Search">
 
         <h4>To Do List</h4>
