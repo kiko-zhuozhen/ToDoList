@@ -1,6 +1,6 @@
 <template>
-    <li class="flex items-center justify-between p-4 hover:bg-gray-100">
-        <div class="flex items-center space-x-4">
+    <li>
+        <div>
         <input type="checkbox" v-model="todo.done">
         <input v-if="todo.editing"
                :value="todo.text"
