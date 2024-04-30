@@ -1,21 +1,20 @@
 <template>
-    <li>
-        <div>
-        <input type="checkbox" v-model="todo.done">
-        <input v-if="todo.editing"
-               :value="todo.text"
-               @input="handleInput"
-               @keyup.enter="finishEdit">
-        <span v-else @click="ToggleEdit">
-            {{ todo.text }}
-        </span>
-        </div>
+<li class="flex items-center justify-between bg-white p-3 rounded-lg shadow-md mb-2 mt-4">
+    <div class="flex items-center">
+        <input type="checkbox" v-model="todo.done" class="mr-2 h-4 w-4">
+        <input v-if="todo.editing" 
+            :value="todo.text" 
+            @input="handleInput" 
+            @keyup.enter="finishEdit" 
+            class="border p-1 rounded-md mr-2 flex-1">
+        <span v-else @click="ToggleEdit" class="cursor-pointer mr-2 select-none">{{ todo.text }}</span>
+    </div>
 
-        <span style="margin-left:60px">ç
-            {{ formattedDate }}
-        </span>
-        <button @click="handleDeleteClick">Delete</button>
-    </li>
+    <div>
+        <span class="text-sm text-gray-500 mr-4">{{ formattedDate }}</span>
+        <button @click="handleDeleteClick" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-md">Delete</button>
+    </div>
+</li>
 </template>
 
 <script lang="ts" setup>

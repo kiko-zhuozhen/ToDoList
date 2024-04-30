@@ -1,22 +1,34 @@
 <template>
     <div class="list">
-        <h4>Search</h4>
-        <input v-model="searchText" type="text" placeholder="Search">
 
-        <h4>To Do List</h4>
-        <input v-model="newTodo" @keyup.enter="addTodo" type="text" placeholder="Add to do information">
-        <button @click="addTodo">Add</button>
+    <div class="flex justify-center items-center">
+        <h4 class="text-center text-xl font-bold text-white mr-4 mt-4">Search</h4>
+        <input v-model="searchText" type="text" placeholder="Search" class="text-lg rounded-lg p-2 w-64 mt-4">
+    </div>
 
-        <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
-        <!-- 用一个computed属性去计算 -->
-
-        <todo-row v-for="(todo, index) in currentTodos"
+    <div class="max-w-3xl mx-auto mt-10 p-6">
+        <h4 class="text-2xl font-bold text-center mb-4 text-white">To Do List</h4>
+    <div class="flex items-center space-x-4 bg-white rounded-lg shadow-lg pt-4 pb-4 pl-4 pr-4">
+        <input v-model="newTodo" 
+        @keyup.enter="addTodo" 
+        type="text" 
+        placeholder="What is your next task?" 
+        class="flex-1 p-2 border rounded-lg focus:outline-none focus:border-blue-500">
+        <button @click="addTodo" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Add</button>
+    </div>
+    <todo-row v-for="(todo, index) in currentTodos"
             :key="todo.id"
             :todo="todo"
             @edit="edit"
             @remove="removeTodo"
             @update-todo="updateTodo">
-        </todo-row>
+    </todo-row>
+
+    <p class="flex justify-end mt-4 text-white">{{ completeTodos }} / {{ totalTodos }}</p>
+</div>
+
+        <!-- 如果searchText 没有值就显示全部列表 如果有值就显示下面的 -->
+        <!-- 用一个computed属性去计算 -->
 
             <!-- <li v-for="(todo, index) in todos" :key='todo.id'> -->
                 <!-- 使用value和@input input有一个事件 当这个东西触发 就会返回一个新的值 --> 
@@ -48,8 +60,6 @@
             </li> -->  
 
         <!-- 计数器 -->
-        <p>{{ completeTodos }} / {{ totalTodos }}</p>
-
     </div>
 </template>
 
